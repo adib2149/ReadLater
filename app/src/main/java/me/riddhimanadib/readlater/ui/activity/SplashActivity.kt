@@ -1,7 +1,8 @@
-package me.riddhimanadib.readlater
+package me.riddhimanadib.readlater.ui.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import me.riddhimanadib.readlater.R
 
 class SplashActivity : AppCompatActivity() {
 
