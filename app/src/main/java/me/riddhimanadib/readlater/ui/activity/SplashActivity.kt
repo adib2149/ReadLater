@@ -15,8 +15,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        Log.d(ReadLaterApplication.LOG_TAG, FirebaseAuth.getInstance().currentUser.toString())
-        Handler().postDelayed(Runnable {
+        Handler().postDelayed({
             if (FirebaseAuth.getInstance().currentUser == null) {
                 finish()
                 SignupActivity.start(this)

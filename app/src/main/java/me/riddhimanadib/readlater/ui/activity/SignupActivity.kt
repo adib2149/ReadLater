@@ -19,7 +19,7 @@ import org.jetbrains.anko.toast
 
 class SignupActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
 
-    val RC_SIGN_IN: Int = 9001;
+    val RC_SIGN_IN: Int = 9001
 
     lateinit var mGoogleApiClient: GoogleApiClient
 
@@ -68,7 +68,7 @@ class SignupActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
         } else {
             val credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null)
             FirebaseAuth.getInstance().signInWithCredential(credential)
-                    .addOnCompleteListener(this, OnCompleteListener {
+                    .addOnCompleteListener(this, {
                         task ->
                             if (task.isSuccessful)
                                 toast(FirebaseAuth.getInstance().currentUser.toString())
