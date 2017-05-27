@@ -16,12 +16,8 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         Handler().postDelayed({
-            if (FirebaseAuth.getInstance().currentUser == null) {
-                finish()
-                SignupActivity.start(this)
-            } else {
-                toast("Logged in")
-            }
+            finish()
+            if (FirebaseAuth.getInstance().currentUser == null) SignupActivity.start(this) else HomeActivity.start(this)
         }, 1500)
 
     }

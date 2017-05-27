@@ -32,7 +32,8 @@
                 <data android:scheme="javascript" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.SignupActivity"></activity>
+        <activity android:name=".ui.activity.SignupActivity" />
+        <activity android:name=".ui.activity.HomeActivity"></activity>
     </application>
 
 </manifest>
