@@ -4,35 +4,44 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import me.riddhimanadib.readlater.R
+import me.riddhimanadib.readlater.ReadLaterApplication
+import me.riddhimanadib.readlater.model.Link
 import org.jetbrains.anko.toast
 
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), ValueEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val database = FirebaseDatabase.getInstance()
-        val myRef = database.getReference("message")
-        myRef.setValue("Hello, World!")
+        // val link: Link = Link(title = "Awesome Article", url = "http://medium.com")
+        // link.save()
 
-        myRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val value = dataSnapshot.getValue(String::class.java)
-                toast(value)
+        Link.getAll(this)
+    }
+
+    override fun onDataChange(dataSnapshot: DataSnapshot?) {
+        if (dataSnapshot == null) {
+            toast("No data found")
+        } else {
+            dataSnapshot.children.forEach {
+                dataSnapshot: DataSnapshot? ->
+                    if (dataSnapshot != null) {
+                        val link = dataSnapshot.getValue(Link::class.java)
+                        Log.d(ReadLaterApplication.LOG_TAG, link.title)
+                    }
             }
+        }
+    }
 
-            override fun onCancelled(error: DatabaseError) {
-                toast("Failed to read value.")
-            }
-        })
-
+    override fun onCancelled(databaseError: DatabaseError?) {
+        toast("Failed to read value.")
     }
 
     companion object {
