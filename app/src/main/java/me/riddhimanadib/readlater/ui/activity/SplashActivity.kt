@@ -14,7 +14,7 @@ class SplashActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             finish()
-            if (FirebaseAuth.getInstance().currentUser == null) SignupActivity.start(this) else HomeActivity.start(this)
+            if (FirebaseAuth.getInstance().currentUser == null) SignupActivity.start(this, intent?.data.toString()) else HomeActivity.start(this, intent?.data.toString())
         }, 1500)
 
     }

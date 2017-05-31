@@ -9,6 +9,8 @@ class ReadLaterApplication : Application() {
 
     companion object {
         const val LOG_TAG: String = "read_later_log"
+
+        const val KEY_URL: String = "key_link_url"
     }
 
 }

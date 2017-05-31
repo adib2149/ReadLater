@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_signup.*
 import me.riddhimanadib.readlater.R
+import me.riddhimanadib.readlater.ReadLaterApplication
 import org.jetbrains.anko.toast
 
 
@@ -21,10 +22,13 @@ class SignupActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
     val RC_SIGN_IN: Int = 9001
 
     lateinit var mGoogleApiClient: GoogleApiClient
+    lateinit var urlFromIntent: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+
+        urlFromIntent = intent.getStringExtra(ReadLaterApplication.KEY_URL)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -65,14 +69,16 @@ class SignupActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
         if (acct == null) {
             toast("Google Sign In failed")
         } else {
-            val credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null)
+            val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
             FirebaseAuth.getInstance().signInWithCredential(credential)
                     .addOnCompleteListener(this, {
                         task ->
-                            if (task.isSuccessful)
-                                toast(FirebaseAuth.getInstance().currentUser.toString())
-                            else
+                            if (task.isSuccessful) {
+                                finish()
+                                HomeActivity.start(this, urlFromIntent)
+                            } else {
                                 toast("Authentication Failed!")
+                            }
                     })
         }
     }
@@ -82,8 +88,10 @@ class SignupActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
     }
 
     companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, SignupActivity::class.java))
+        fun start(context: Context, url: String) {
+            var intent = Intent(context, SignupActivity::class.java)
+            intent.putExtra(ReadLaterApplication.KEY_URL, url)
+            context.startActivity(intent)
         }
     }
 

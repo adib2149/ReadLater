@@ -1,5 +1,6 @@
 package me.riddhimanadib.readlater.ui.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,14 +17,22 @@ import org.jetbrains.anko.toast
 
 class HomeActivity : AppCompatActivity(), ValueEventListener {
 
+    val REQ_CODE_ADD_LINK: Int = 1
+
+    lateinit var urlFromIntent: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        // val link: Link = Link(title = "Awesome Article", url = "http://medium.com")
-        // link.save()
+        urlFromIntent = intent.getStringExtra(ReadLaterApplication.KEY_URL)
 
-        Link.getAll(this)
+        if (urlFromIntent.equals("")) {
+            Link.getAll(this)
+        } else {
+            AddLinkActivity.startForResult(this, urlFromIntent, REQ_CODE_ADD_LINK)
+        }
+
     }
 
     override fun onDataChange(dataSnapshot: DataSnapshot?) {
@@ -44,9 +53,18 @@ class HomeActivity : AppCompatActivity(), ValueEventListener {
         toast("Failed to read value.")
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if ((resultCode == Activity.RESULT_OK) && (requestCode == REQ_CODE_ADD_LINK)) {
+            Link.getAll(this)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, HomeActivity::class.java))
+        fun start(context: Context, url: String) {
+            var intent = Intent(context, HomeActivity::class.java)
+            intent.putExtra(ReadLaterApplication.KEY_URL, url)
+            context.startActivity(intent)
         }
     }
 

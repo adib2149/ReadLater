@@ -36,6 +36,10 @@ class Link {
                 .setValue(this)
     }
 
+    override fun toString(): String {
+        return "title: " + this.title + ", url: " + this.url + ", description: " + this.description + ", imageUrl: " + this.imageUrl + ", isRead: " + this.isRead + ", timeStamp: " + this.timeStamp;
+    }
+
     companion object {
 
         fun getAll(/*page: Int, */listener: ValueEventListener) {
